@@ -143,7 +143,7 @@ if (${DYNAMIC_ARCH})
 endif ()
 
 # Only build shared libs for MSVC
-if (MSVC)
+if (MSVC AND NOT DEFINED BUILD_SHARED_LIBS)
   set(BUILD_SHARED_LIBS ON)
 endif()
 
