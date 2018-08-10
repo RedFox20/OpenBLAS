@@ -125,9 +125,14 @@ if (NOT NOFORTRAN AND NOT NO_LAPACK)
   endif ()
 endif ()
 
+# Only build shared libs for MSVC
+if (MSVC AND NOT DEFINED BUILD_SHARED_LIBS)
+  set(BUILD_SHARED_LIBS ON)
+endif()
+
 # Only generate .def for dll on MSVC and always produce pdb files for debug and release
 if(MSVC)
-  if (${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} LESS 3.4)
+  if (BUILD_SHARED_LIBS AND ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} LESS 3.4)
     set(OpenBLAS_DEF_FILE "${PROJECT_BINARY_DIR}/openblas.def")
   endif()
   set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /Zi")
@@ -141,11 +146,6 @@ if (${DYNAMIC_ARCH})
     list(APPEND TARGET_OBJS "$<TARGET_OBJECTS:kernel_${TARGET_CORE}>")
   endforeach()
 endif ()
-
-# Only build shared libs for MSVC
-if (MSVC AND NOT DEFINED BUILD_SHARED_LIBS)
-  set(BUILD_SHARED_LIBS ON)
-endif()
 
 
 # add objects to the openblas lib
