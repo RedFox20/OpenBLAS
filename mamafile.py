@@ -13,8 +13,11 @@ class OpenBLAS(mama.BuildTarget):
         #    'BUILD_WITHOUT_LAPACK=TRUE',
         #    'BUILD_RELAPACK=TRUE'
         )
-        if self.windows:
-            self.add_cl_flags('/wd4244')
         if not self.windows:
             self.add_cl_flags('-fPIC')
 
+    def package(self):
+        self.default_package()
+        self.export_libs('driver')
+        self.export_libs('interface')
+        self.export_libs('kernel')

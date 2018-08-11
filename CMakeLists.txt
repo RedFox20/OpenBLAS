@@ -99,6 +99,10 @@ if (NOT DEFINED CORE OR "${CORE}" STREQUAL "UNKNOWN")
   message(FATAL_ERROR "Detecting CPU failed. Please set TARGET explicitly, e.g. make TARGET=your_cpu_target. Please read README for details.")
 endif ()
 
+if (MSVC)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4996 /wd4244 /wd4312 /MP")
+endif()
+
 #Set default output directory
 set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
@@ -180,7 +184,7 @@ foreach (OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES})
   set_target_properties( ${OpenBLAS_LIBNAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${PROJECT_BINARY_DIR}/lib/${OUTPUTCONFIG} )
 endforeach()
 
-enable_testing()
+#enable_testing()
 
 if (USE_THREAD)
   # Add threading library to linker
@@ -194,15 +198,15 @@ endif()
 
 if (MSVC OR NOT NOFORTRAN)
   # Broken without fortran on unix
-  add_subdirectory(utest)
+  #add_subdirectory(utest)
 endif()
 
 if (NOT MSVC AND NOT NOFORTRAN)
   # Build test and ctest
-  add_subdirectory(test)
-  if(NOT NO_CBLAS)
-    add_subdirectory(ctest)
-  endif()
+  #add_subdirectory(test)
+  #if(NOT NO_CBLAS)
+  #  add_subdirectory(ctest)
+  #endif()
 endif()
 
 set_target_properties(${OpenBLAS_LIBNAME} PROPERTIES
